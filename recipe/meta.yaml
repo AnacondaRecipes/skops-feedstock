@@ -1,27 +1,26 @@
 {% set name = "skops" %}
 {% set version = "0.13.0" %}
-{% set python_min = "3.9" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://github.com/skops-dev/skops/archive/v{{ version }}.tar.gz
+  url: https://github.com/{{ name }}-dev/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: eb5b250749bd959f9dc66a77f5e376a41d3566ccad96a8e7f85602fb6ccf8a0b
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<39]  
 
 requirements:
   host:
-    - python {{ python_min }}
+    - python
     - hatchling
     - pip
   run:
-    - python >={{ python_min }}
+    - python
     - numpy >=1.25.0
     - scipy >=1.10.0
     - scikit-learn >=1.2
@@ -34,15 +33,20 @@ test:
   commands:
     - pip check
   requires:
-    - python {{ python_min }}
+    - python 
     - pip
 
 about:
   home: http://github.com/skops-dev/skops
   summary: A set of tools, related to machine learning in production.
   license: MIT
+  license_family: MIT
   license_file: LICENSE
-  doc_url: http://github.com/skops-dev/skops
+  description: |
+    skops is a Python library helping you share your scikit-learn based models and put them in production. 
+    At the moment, it includes skops.io to securely persist sklearn estimators and more, without using pickle. 
+    It also includes skops.card to create a model card explaining what the model does and how it should be used.
+  doc_url: https://github.com/skops-dev/skops/blob/main/README.rst
   dev_url: http://github.com/skops-dev/skops
 
 extra:
